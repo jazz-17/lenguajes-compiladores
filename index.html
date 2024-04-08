@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+</head>
+<body>
+    <button onclick="showElement('parser')">opcion 1</button>
+    <button onclick="showElement('scanner')">opcion 2</button>
+    
+    <div id="parser" class="hidden">
+      <h2>1</h2>
+      <p>contenido de parser</p>
+    </div>
+    
+    <div id="scanner" class="hidden">
+      <h2>2</h2>
+      <p>contenido de scanner</p>
+    </div>
+</body>
+</html>
+<script>
+    function showElement(id) {
+      // Hide all elements with class 'hidden'
+      var elements = document.querySelectorAll('.hidden');
+      elements.forEach(function(element) {
+        element.style.display = 'none';
+      });
+    
+      // Show the element with the specified ID
+      var elementToShow = document.getElementById(id);
+      elementToShow.style.display = 'block';
+    }
+    </script>
+<style>
+    .hidden {
+      display: none;
+    }
+</style>
+<script src="./parser.js"></script>
+<script src="./scanner.js"></script>
+
 
