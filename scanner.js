@@ -1,81 +1,42 @@
 class Scanner {
-    //; scanner.tokens = []; scanner.errors = []
+  //; scanner.tokens = []; scanner.errors = []
   constructor(content) {
     this.content = content;
-    this.keywords = [
-      "auto",
-      "break",
-      "case",
-      "char",
-      "const",
-      "continue",
-      "default",
-      "do",
-      "double",
-      "else",
-      "enum",
-      "extern",
-      "float",
-      "for",
-      "goto",
-      "if",
-      "int",
-      "long",
-      "register",
-      "return",
-      "short",
-      "signed",
-      "sizeof",
-      "static",
-      "struct",
-      "switch",
-      "typedef",
-      "union",
-      "unsigned",
-      "void",
-      "volatile",
-      "while",
+    this.dataTypes = ["entero", "real", "booleano", "cadena"];
+    this.controlStructureKeywords = [
+      "si",
+      "sino",
+      "mientras",
+      "para",
+      "hacer",
+      "fin_si",
+      "fin_mientras",
+      "fin_para",
+      "fin_hacer",
     ];
-    this.operators = [
-      "+",
-      "-",
-      "*",
-      "/",
-      "%",
-      ">",
-      "<",
-      "=",
-      "!",
-      "&",
-      "|",
-      "?",
-      ":",
-      ";",
-      "(",
-      ")",
-      ",",
-    ];
-    this.curIndex = 0;
+    this.operators = ["+", "-", "*", "/", "%", ">", "<", "=", "!", "&", "|"];
+    this.separators = [",", "(", ")"];
+    this.curIndex = 0; // current index in the content
   }
 
   scan() {
     if (this.curIndex >= this.content.length) {
-      return "$"; // end of file
+      return { value: "$", type: "Fin" }; // end of file
     }
 
     // Skip whitespaces
     while (/\s/.test(this.content.charAt(this.curIndex))) {
       this.curIndex++;
       if (this.curIndex >= this.content.length) {
-        return "$"; // end of file
+        return { value: "$", type: "Fin" }; // end of file
       }
     }
 
     let token = "";
     const currentChar = this.content.charAt(this.curIndex);
 
- if (currentChar === '"') {
-      // String literal
+    // String literal
+    if (currentChar === '"') {
       token += currentChar;
       this.curIndex++;
       while (this.content.charAt(this.curIndex) !== '"') {
@@ -84,72 +45,77 @@ class Scanner {
       }
       token += this.content.charAt(this.curIndex);
       this.curIndex++;
-      return token;
-    } else if (/\d/.test(currentChar)) {
-      // Number
+      return { value: token, type: "cadena" };
+    }
+    // Number
+    else if (/\d/.test(currentChar)) {
       while (/\d/.test(this.content.charAt(this.curIndex))) {
         token += this.content.charAt(this.curIndex);
         this.curIndex++;
       }
-      return token;
-    } else if (/[a-zA-Z_]/.test(currentChar)) {
-      // Identifier / Keyword
+      return { value: token, type: "número" };
+    }
+
+    // Identifier / control structure keyword / data type
+    else if (/[a-zA-Z_]/.test(currentChar)) {
       while (/\w/.test(this.content.charAt(this.curIndex))) {
         token += this.content.charAt(this.curIndex);
         this.curIndex++;
         if (this.curIndex >= this.content.length) {
-          return token;
+          break;
         }
       }
-      return token;
-    } else if (this.isOperator(currentChar)) {
-      // Operator
+
+      let type;
+      if (this.controlStructureKeywords.includes(token)) {
+        type = "palabra clave";
+      } else if (this.dataTypes.includes(token)) {
+        type = "data type";
+      } else {
+        type = "identificador";
+      }
+
+      return { value: token, type: type };
+    }
+    // Operator
+    else if (this.operators.includes(currentChar)) {
       token += currentChar;
       this.curIndex++;
       if (this.curIndex >= this.content.length) {
-        return token;
+        return { value: token, type: "operador" };
       }
+
       const nextChar = this.content.charAt(this.curIndex);
 
-      if (
-        (currentChar === "<" || currentChar === ">") &&
-        (nextChar === "<" || nextChar === "=" || nextChar === ">")
-      ) {
+      // Check for compound operators and increment curIndex accordingly
+      if ((currentChar === "<" || currentChar === ">") && nextChar === "=") {
         token += nextChar;
         this.curIndex++;
       } else if (
-        (currentChar === "+" ||
-          currentChar === "-" ||
-          currentChar === "*" ||
-          currentChar === "/" ||
-          currentChar === "%") &&
+        ["+", "-", "*", "/", "%"].includes(currentChar) &&
         (currentChar === nextChar || nextChar === "=")
       ) {
         token += nextChar;
         this.curIndex++;
-      } else if (
-        (currentChar === "&" || currentChar === "|") &&
-        (nextChar === "&" || nextChar === "|")
-      ) {
+      } else if (["&", "|"].includes(currentChar) && nextChar === currentChar) {
         token += nextChar;
         this.curIndex++;
       } else if (currentChar === "!" && nextChar === "=") {
         token += nextChar;
         this.curIndex++;
       }
-      return token;
+
+      return { value: token, type: "operador" };
+    }
+    // Separator
+    else if (this.separators.includes(currentChar)) {
+      token += currentChar;
+      this.curIndex++;
+      return { value: token, type: "separador" };
     } else {
       token += currentChar;
       this.curIndex++;
-      return token;
+      return { value: token, type: "?" };
     }
-  }
-
-  isKeyword(token) {
-    return this.keywords.includes(token);
-  }
-
-  isOperator(c) {
-    return this.operators.includes(c);
   }
 }

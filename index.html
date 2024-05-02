@@ -146,15 +146,14 @@
         <div class="centered-content">
           <textarea
             class="code-editor"
-            placeholder="Enter your code here..."
+            placeholder="Eg: &#09;entero a, b&#10;&#09;entero b, c = 3&#10;&#09;real x,suma, y=48"
             style="width: 70%"
             oninput="scanner.content = this.value; scanner.curIndex = 0"
           ></textarea>
           <textarea
             class="code-editor"
             placeholder="Token..."
-            style=" width: 30%"
-            disabled
+            style="width: 30%; font-style: italic; font-size: 14px;"            disabled
           ></textarea>
         </div>
       </div>
@@ -162,14 +161,24 @@
 
     <!-- PARSER -->
     <div id="parser" class="main" style="display: none">
-      <textarea
-        class="code-editor"
-        placeholder="Enter your code here..."
-      ></textarea>
-      <textarea
-        class="code-editor"
-        placeholder="Enter your code here..."
-      ></textarea>
+      <div class="idk">
+        <button class="button" onclick="verifyString()">Verificar</button>
+
+        <div class="centered-content">
+          <textarea
+            class="code-editor"
+            placeholder="Eg: &#09;entero a, b&#10;&#09;entero b, c = 3&#10;&#09;real x,suma, y=48"
+            style="width: 70%"
+            oninput="scanner.content = this.value; scanner.curIndex = 0"
+          ></textarea>
+          <textarea
+            class="code-editor"
+            placeholder="Token..."
+            style="width: 30%; font-style: italic; font-size: 14px;"
+            disabled
+          ></textarea>
+        </div>
+      </div>
     </div>
   </body>
   <style>
@@ -196,7 +205,7 @@
       background-color: #383838e5;
       color: rgb(207, 207, 207);
       font-family: monospace; /* Use a monospaced font for code */
-      font-size: 14px; /* Adjust the font size as needed */
+      font-size: 17px; /* Adjust the font size as needed */
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -210,22 +219,27 @@
       width: 100%;
       margin-left: 4rem;
       margin-right: 4rem;
-      gap:2rem
+      gap: 2rem;
     }
-    .centered-content{
+    .centered-content {
       display: flex;
       justify-content: space-evenly;
       align-items: center;
       flex-grow: 1;
-gap:4rem    }
+      gap: 4rem;
+    }
   </style>
-  <script src="parser.js"></script>
   <script src="scanner.js"></script>
+  <script src="parser.js"></script>
   <script>
     let scanner = new Scanner("");
+    let parser = new Parser(scanner);
+
     function getToken() {
       let token = scanner.scan();
-      document.querySelectorAll(".code-editor")[1].value = token;
+      document.querySelectorAll(
+        ".code-editor"
+      )[1].value = `${token.value}\n\n(${token.type})`;
     }
 
     function toggleContent(showElementId, hideElementId, hideElementId2) {
