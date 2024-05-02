@@ -15,7 +15,7 @@ class Scanner {
       "fin_hacer",
     ];
     this.operators = ["+", "-", "*", "/", "%", ">", "<", "=", "!", "&", "|"];
-    this.separators = [",", "(", ")"];
+    this.separators = [";", ",", "(", ")"];
     this.curIndex = 0; // current index in the content
   }
 
@@ -111,11 +111,23 @@ class Scanner {
     else if (this.separators.includes(currentChar)) {
       token += currentChar;
       this.curIndex++;
-      return { value: token, type: "separador" };
+
+      let type
+      if (currentChar === ";") {
+        type = "semicolon";
+      } else if (currentChar === ",") {
+        type = "comma";
+      } else {
+        type = "separador";
+      }
+      return { value: token, type: type };
     } else {
       token += currentChar;
       this.curIndex++;
       return { value: token, type: "?" };
     }
+  }
+  backtrack() {
+    this.curIndex--;
   }
 }

@@ -1,52 +1,66 @@
 class Parser {
   constructor(scanner) {
     this.scanner = scanner;
+    this.message = "";
   }
 
-  printxd(){
-    console.log("xd")
-  }
   parse() {
     let token = this.scanner.scan();
-    while (token != "$") {
-      console.log(token);
-      switch (token) {
-        case "identifier":
-          if (this.keywords.includes(this.scanner.tokens[this.curIndex])) {
-            console.log("Keyword: " + this.scanner.tokens[this.curIndex]);
-          } else {
-            console.log("Identifier: " + this.scanner.tokens[this.curIndex]);
+    while (token.type !== "Fin") {
+      // Check if the token corresponds to a variable type
+
+      if (token.type === "data type") {
+        token = this.scanner.scan();
+        if (token.type !== "identificador") {
+          this.message = "Error: Expected identifier after data type";
+          return false;
+        }
+
+        token = this.scanner.scan();
+
+        while (token.value === "," || token.value === "=") {
+          if (token.value === ",") {
+            token = this.scanner.scan();
+            if (token.type !== "identificador") {
+              this.message = "Error: Expected identifier after comma";
+              return false;
+            }
+          } else if (token.value === "=") {
+            token = this.scanner.scan();
+            if (token.type !== "número") {
+              this.message = "Error: Expected number after equals sign";
+              return false;
+            }
+
+            //token -> number
+
+            token = this.scanner.scan();
+
+            if (token.value === ";") {
+              this.scanner.backtrack();
+            } else if (token.value === ",") {
+              token = this.scanner.scan();
+              if (token.type !== "identificador") {
+                this.message = "Error: Expected identifier after comma";
+                return false;
+              }
+            } else {
+              this.message =
+                "Error: Expected comma or semicolon after variable declaration";
+              return false;
+            }
           }
-          break;
-        case "operator":
-          console.log("Operator: " + this.scanner.tokens[this.curIndex]);
-          break;
-        case "number":
-          console.log("Number: " + this.scanner.tokens[this.curIndex]);
-          break;
-        case "string":
-          console.log("String: " + this.scanner.tokens[this.curIndex]);
-          break;
-        case "char":
-          console.log("Char: " + this.scanner.tokens[this.curIndex]);
-          break;
-        case "comment":
-          console.log("Comment: " + this.scanner.tokens[this.curIndex]);
-          break;
-        case "newline":
-          console.log("Newline");
-          break;
-        case "whitespace":
-          console.log("Whitespace");
-          break;
-        case "error":
-          console.log("Error: " + this.scanner.errors[this.curIndex]);
-          break;
-        default:
-          console.log("Unknown token: " + this.scanner.tokens[this.curIndex]);
-          break;
+
+          token = this.scanner.scan();
+        }
+
+        if (token.value !== ";") {
+          this.message = "Error: Expected semicolon after variable declaration";
+          return false;
+        }
       }
       token = this.scanner.scan();
     }
+    return true;
   }
 }

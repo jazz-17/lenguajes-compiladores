@@ -146,14 +146,16 @@
         <div class="centered-content">
           <textarea
             class="code-editor"
-            placeholder="Eg: &#09;entero a, b&#10;&#09;entero b, c = 3&#10;&#09;real x,suma, y=48"
+            placeholder="Eg: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;"
+
             style="width: 70%"
             oninput="scanner.content = this.value; scanner.curIndex = 0"
           ></textarea>
           <textarea
             class="code-editor"
             placeholder="Token..."
-            style="width: 30%; font-style: italic; font-size: 14px;"            disabled
+            style="width: 30%; font-style: italic; font-size: 14px"
+            disabled
           ></textarea>
         </div>
       </div>
@@ -167,14 +169,14 @@
         <div class="centered-content">
           <textarea
             class="code-editor"
-            placeholder="Eg: &#09;entero a, b&#10;&#09;entero b, c = 3&#10;&#09;real x,suma, y=48"
+            placeholder="Eg: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;"
             style="width: 70%"
-            oninput="scanner.content = this.value; scanner.curIndex = 0"
+            oninput="scanner.content = this.value; scanner.curIndex = 0; parser.message = ''"
           ></textarea>
           <textarea
             class="code-editor"
             placeholder="Token..."
-            style="width: 30%; font-style: italic; font-size: 14px;"
+            style="width: 30%; font-style: italic; font-size: 14px"
             disabled
           ></textarea>
         </div>
@@ -241,7 +243,19 @@
         ".code-editor"
       )[1].value = `${token.value}\n\n(${token.type})`;
     }
+    function verifyString() {
+      let result = parser.parse();
+      if (!result) {
+        document.querySelectorAll(
+          ".code-editor"
+        )[3].value = parser.message;
+        return
+      }
+      document.querySelectorAll(
+        ".code-editor"
+      )[3].value = "La cadena es correcta";
 
+    }
     function toggleContent(showElementId, hideElementId, hideElementId2) {
       var showElement = document.getElementById(showElementId);
       var hideElement = document.getElementById(hideElementId);
