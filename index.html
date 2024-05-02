@@ -19,16 +19,16 @@
       </div>
 
       <nav class="navbar">
-        <button  onclick="toggleContent('info', 'scanner', 'parser')"
-          >Nosotros</button
-        >
-        <button  onclick="toggleContent('scanner', 'info', 'parser')"
-          >Scanner</button
-        >
-        <button onclick="toggleContent('parser', 'info', 'scanner')"
-          >Parser</button
-        >
-        <button >Agradecimiento</button>
+        <button onclick="toggleContent('info', 'scanner', 'parser')">
+          Nosotros
+        </button>
+        <button onclick="toggleContent('scanner', 'info', 'parser')">
+          Scanner
+        </button>
+        <button onclick="toggleContent('parser', 'info', 'scanner')">
+          Parser
+        </button>
+        <button>Agradecimiento</button>
       </nav>
     </div>
 
@@ -36,7 +36,7 @@
       <header class="content header">
         <h2 class="title">Inicio</h2>
         <p>SOMOS EL GRUPO 12 DE LENGUAJES Y COMPILADORES</p>
-        <a href="#" class="btn"> Saber mas</a>
+        <a href="#" class="btn"> Saber más</a>
       </header>
 
       <section class="content sau">
@@ -143,20 +143,21 @@
     <div id="scanner" class="main" style="display: none">
       <div class="idk">
         <button class="button" onclick="getToken()">get Token</button>
-        <textarea
-          class="code-editor"
-          placeholder="Enter your code here..."
-          style=" width: 90%"
-          oninput="scanner.content = this.value; scanner.curIndex = 0"
-        ></textarea>
+        <div class="centered-content">
+          <textarea
+            class="code-editor"
+            placeholder="Enter your code here..."
+            style="width: 70%"
+            oninput="scanner.content = this.value; scanner.curIndex = 0"
+          ></textarea>
+          <textarea
+            class="code-editor"
+            placeholder="Token..."
+            style=" width: 30%"
+            disabled
+          ></textarea>
+        </div>
       </div>
-
-      <textarea
-        class="code-editor"
-        placeholder="Token..."
-        style="margin-right: 8rem; width: 30%"
-        disabled
-      ></textarea>
     </div>
 
     <!-- PARSER -->
@@ -187,9 +188,10 @@
       border-radius: 4px;
       cursor: pointer;
       width: 220px;
+      margin-top: 1rem;
     }
     .code-editor {
-      height: 70%;
+      height: 100%;
 
       background-color: #383838e5;
       color: rgb(207, 207, 207);
@@ -201,15 +203,21 @@
 
       box-sizing: border-box; /* Include padding and border in the element's total width and height */
     }
-    .idk{
+    .idk {
       display: flex;
       flex-direction: column;
       height: 100%;
-      justify-content: end;
-      gap:1rem;
-      align-items: center;
-      width: 70%;
+      width: 100%;
+      margin-left: 4rem;
+      margin-right: 4rem;
+      gap:2rem
     }
+    .centered-content{
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-grow: 1;
+gap:4rem    }
   </style>
   <script src="parser.js"></script>
   <script src="scanner.js"></script>
