@@ -33,24 +33,26 @@ body{
     margin-left: 30px;
 }
 
-.logo a {
+.logo button {
     text-decoration: none;
     color: #fff;
     text-transform: uppercase;
     font-size: 20px;
 }
 
-.navbar a {
+.navbar button {
+    background-color: #171717;
     display: block;
     padding: 20px 20px;
     color: #fff;
     text-decoration: none;
     text-transform: uppercase;
     font-size: 20px;
+    cursor: pointer;
 
 }
 
-.navbar a:hover {
+.navbar button:hover {
     background: #FFFF00;
 }
 

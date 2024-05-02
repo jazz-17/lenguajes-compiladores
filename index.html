@@ -19,16 +19,16 @@
       </div>
 
       <nav class="navbar">
-        <a href="#" onclick="toggleContent('info', 'scanner', 'parser')"
-          >Nosotros</a
+        <button  onclick="toggleContent('info', 'scanner', 'parser')"
+          >Nosotros</button
         >
-        <a href="#" onclick="toggleContent('scanner', 'info', 'parser')"
-          >Scanner</a
+        <button  onclick="toggleContent('scanner', 'info', 'parser')"
+          >Scanner</button
         >
-        <a href="#" onclick="toggleContent('parser', 'info', 'scanner')"
-          >Parser</a
+        <button onclick="toggleContent('parser', 'info', 'scanner')"
+          >Parser</button
         >
-        <a href="#">Agradecimiento</a>
+        <button >Agradecimiento</button>
       </nav>
     </div>
 
@@ -211,8 +211,8 @@
       width: 70%;
     }
   </style>
-  <script src="./parser.js"></script>
-  <script src="./scanner.js"></script>
+  <script src="parser.js"></script>
+  <script src="scanner.js"></script>
   <script>
     let scanner = new Scanner("");
     function getToken() {

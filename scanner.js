@@ -1,4 +1,5 @@
 class Scanner {
+    //; scanner.tokens = []; scanner.errors = []
   constructor(content) {
     this.content = content;
     this.keywords = [
