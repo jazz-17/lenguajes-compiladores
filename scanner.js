@@ -1,5 +1,4 @@
 class Scanner {
-  //; scanner.tokens = []; scanner.errors = []
   constructor(content) {
     this.content = content;
     this.dataTypes = ["entero", "real", "booleano", "cadena"];
@@ -16,52 +15,92 @@ class Scanner {
     ];
     this.operators = ["+", "-", "*", "/", "%", ">", "<", "=", "!", "&", "|"];
     this.separators = [";", ",", "(", ")"];
-    this.curIndex = 0; // current index in the content
+    this._index = 0; // current index in the content
+    this.currentChar = "";
+
+    this.errors = [];
   }
 
+  set index(i) {
+    this._index = i;
+    this.currentChar = this.content.charAt(i);
+  }
+  get index() {
+    return this._index;
+  }
   scan() {
-    if (this.curIndex >= this.content.length) {
+    this.errors = [];
+    if (this.index >= this.content.length) {
       return { value: "$", type: "Fin" }; // end of file
     }
 
     // Skip whitespaces
-    while (/\s/.test(this.content.charAt(this.curIndex))) {
-      this.curIndex++;
-      if (this.curIndex >= this.content.length) {
+    while (/\s/.test(this.currentChar)) {
+      this.index++;
+      if (this.index >= this.content.length) {
         return { value: "$", type: "Fin" }; // end of file
       }
     }
 
+    // Begin tokenization
     let token = "";
-    const currentChar = this.content.charAt(this.curIndex);
 
     // String literal
-    if (currentChar === '"') {
-      token += currentChar;
-      this.curIndex++;
-      while (this.content.charAt(this.curIndex) !== '"') {
-        token += this.content.charAt(this.curIndex);
-        this.curIndex++;
+    if (this.currentChar === '"') {
+      token += this.currentChar;
+      this.index++;
+      while (this.currentChar !== '"' && this.index < this.content.length) {
+        token += this.currentChar;
+        this.index++;
       }
-      token += this.content.charAt(this.curIndex);
-      this.curIndex++;
+      if (this.currentChar !== '"') {
+        this.errors.push({
+          message: "Error: Expected closing quote",
+          index: this.index,
+        });
+        return { value: token, type: "error" };
+      }
+
+      token += this.currentChar;
+      this.index++;
       return { value: token, type: "cadena" };
     }
     // Number
-    else if (/\d/.test(currentChar)) {
-      while (/\d/.test(this.content.charAt(this.curIndex))) {
-        token += this.content.charAt(this.curIndex);
-        this.curIndex++;
+    else if (/\d/.test(this.currentChar)) {
+      while (/\d/.test(this.currentChar)) {
+        token += this.currentChar;
+        this.index++;
+      }
+      if (this.currentChar === ".") {
+        token += this.currentChar;
+        this.index++;
+        while (/\d/.test(this.currentChar)) {
+          token += this.currentChar;
+          this.index++;
+        }
+        return { value: token, type: "real" };
+      }
+      if (/[\w]/.test(this.currentChar)) {
+        token += this.currentChar;
+        while (/\s/.test(this.currentChar)) {
+          token += this.currentChar;
+          this.index++;
+        }
+        this.errors.push({
+          message: "Error: Invalid number",
+          index: this.index,
+        });
+        return { value: token, type: "error" };
       }
       return { value: token, type: "número" };
     }
 
     // Identifier / control structure keyword / data type
-    else if (/[a-zA-Z_]/.test(currentChar)) {
-      while (/\w/.test(this.content.charAt(this.curIndex))) {
-        token += this.content.charAt(this.curIndex);
-        this.curIndex++;
-        if (this.curIndex >= this.content.length) {
+    else if (/[a-zA-Z_]/.test(this.currentChar)) {
+      while (/\w/.test(this.currentChar)) {
+        token += this.currentChar;
+        this.index++;
+        if (this.index >= this.content.length) {
           break;
         }
       }
@@ -78,56 +117,58 @@ class Scanner {
       return { value: token, type: type };
     }
     // Operator
-    else if (this.operators.includes(currentChar)) {
-      token += currentChar;
-      this.curIndex++;
-      if (this.curIndex >= this.content.length) {
-        return { value: token, type: "operador" };
+    else if (this.operators.includes(this.currentChar)) {
+      let token = this.currentChar;
+      const nextChar = this.content.charAt(this.index + 1);
+
+      // Helper function to handle compound operators
+      const handleCompoundOperator = (...operators) => {
+        if (operators.includes(nextChar)) {
+          token += nextChar;
+          this.index++;
+        }
+      };
+
+      switch (this.currentChar) {
+        case "<":
+        case ">":
+        case "=":
+        case "!":
+          handleCompoundOperator("=");
+          break;
+        case "+":
+        case "-":
+        case "*":
+        case "/":
+        case "%":
+          handleCompoundOperator("=", this.currentChar);
+          break;
+        case "&":
+        case "|":
+          handleCompoundOperator(this.currentChar);
+          break;
+        default:
+          break;
       }
 
-      const nextChar = this.content.charAt(this.curIndex);
-
-      // Check for compound operators and increment curIndex accordingly
-      if ((currentChar === "<" || currentChar === ">") && nextChar === "=") {
-        token += nextChar;
-        this.curIndex++;
-      } else if (
-        ["+", "-", "*", "/", "%"].includes(currentChar) &&
-        (currentChar === nextChar || nextChar === "=")
-      ) {
-        token += nextChar;
-        this.curIndex++;
-      } else if (["&", "|"].includes(currentChar) && nextChar === currentChar) {
-        token += nextChar;
-        this.curIndex++;
-      } else if (currentChar === "!" && nextChar === "=") {
-        token += nextChar;
-        this.curIndex++;
-      }
-
+      this.index++;
       return { value: token, type: "operador" };
     }
     // Separator
-    else if (this.separators.includes(currentChar)) {
-      token += currentChar;
-      this.curIndex++;
-
-      let type
-      if (currentChar === ";") {
-        type = "semicolon";
-      } else if (currentChar === ",") {
-        type = "comma";
-      } else {
-        type = "separador";
-      }
-      return { value: token, type: type };
-    } else {
-      token += currentChar;
-      this.curIndex++;
-      return { value: token, type: "?" };
+    else if (this.separators.includes(this.currentChar)) {
+      token += this.currentChar;
+      this.index++;
+      return { value: token, type: "separator" };
+    } 
+    // Error
+    else {
+      token += this.currentChar;
+      this.index++;
+      this.errors.push({
+        message: `Error: Unexpected character ${token}`,
+        index: this.index,
+      });
+      return { value: token, type: "error" };
     }
-  }
-  backtrack() {
-    this.curIndex--;
   }
 }
