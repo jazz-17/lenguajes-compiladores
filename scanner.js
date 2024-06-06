@@ -1,17 +1,13 @@
 class Scanner {
   constructor(content) {
     this.content = content;
-    this.dataTypes = ["entero", "real", "booleano", "cadena"];
+    this.dataTypes = ["entero", "real"];
     this.controlStructureKeywords = [
       "si",
-      "sino",
+      "sino", // To do
       "mientras",
-      "para",
-      "hacer",
       "fin_si",
       "fin_mientras",
-      "fin_para",
-      "fin_hacer",
     ];
     this.operators = ["+", "-", "*", "/", "%", ">", "<", "=", "!", "&", "|"];
     this.separators = [";", ",", "(", ")"];
@@ -45,8 +41,8 @@ class Scanner {
     // Begin tokenization
     let token = "";
 
-    // String literal
-    if (this.currentChar === '"') {
+    // String literal --NOT SUPPORTED--
+    if (this.currentChar === '"') { 
       token += this.currentChar;
       this.index++;
       while (this.currentChar !== '"' && this.index < this.content.length) {
@@ -55,7 +51,7 @@ class Scanner {
       }
       if (this.currentChar !== '"') {
         this.errors.push({
-          message: "Error: Expected closing quote",
+          message: "Error: Comillas de cierre esperada",
           index: this.index,
         });
         return { value: token, type: "error" };
@@ -63,7 +59,8 @@ class Scanner {
 
       token += this.currentChar;
       this.index++;
-      return { value: token, type: "cadena" };
+      // return { value: token, type: "cadena" };
+      return { value: token, type: "error, el tipo cadena no es soportado" };
     }
     // Number
     else if (/\d/.test(this.currentChar)) {
@@ -87,7 +84,7 @@ class Scanner {
           this.index++;
         }
         this.errors.push({
-          message: "Error: Invalid number",
+          message: "Error: Numero inválido",
           index: this.index,
         });
         return { value: token, type: "error" };
@@ -158,14 +155,14 @@ class Scanner {
     else if (this.separators.includes(this.currentChar)) {
       token += this.currentChar;
       this.index++;
-      return { value: token, type: "separator" };
+      return { value: token, type: "separador" };
     } 
     // Error
     else {
       token += this.currentChar;
       this.index++;
       this.errors.push({
-        message: `Error: Unexpected character ${token}`,
+        message: `Error: caracter no reconocido ${token}`,
         index: this.index,
       });
       return { value: token, type: "error" };

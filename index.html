@@ -152,7 +152,7 @@
         <div class="centered-content">
           <textarea
             class="code-editor"
-            placeholder="Eg: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;"
+            placeholder="Ej: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;real a=3.5*2+1*10&#10;&#09;fin_si"
             style="width: 70%"
             oninput="scanner.content = this.value; scanner.index = 0"
             onchange="scanner.content = this.value; scanner.index = 0"
@@ -181,14 +181,13 @@
         <div class="centered-content">
           <textarea
             class="code-editor"
-            placeholder="Eg: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;"
-            style="width: 70%"
+            placeholder="Ej: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;real a=3.5*2+1*10&#10;&#09;fin_si"            style="width: 70%"
             oninput="scanner.content = this.value; scanner.index = 0; parser.message = ''"
             onchange="scanner.content = this.value; scanner.index = 0; parser.message = ''"
           ></textarea>
           <textarea
             class="code-editor"
-            placeholder="Token..."
+            placeholder="Resultado..."
             style="width: 30%; font-style: italic; font-size: 14px"
             disabled
           ></textarea>

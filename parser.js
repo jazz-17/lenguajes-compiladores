@@ -2,26 +2,6 @@ class Parser {
   constructor(scanner) {
     this.scanner = scanner;
     this.message = "";
-
-    /*************************************
-
-    S -> D S 
-      -> lambda
-
-    D -> data type identificador E R ;
-
-    R -> , identificador E R
-      -> lambda 
-
-    E -> = X
-      -> lambda 
-
-    X -> número P 
-    
-    P -> operador número P
-      -> lambda
-
-    **************************************/
     this.simbolosDir = {
       // Variable Declaration
       D: {
@@ -35,6 +15,10 @@ class Parser {
         1: ["="],
         2: [",", ";"],
       },
+      D_M: {
+        1: ["identificador", "número", "real"],
+        2: [",", ";"],
+      },
 
       // variable assignment
       A: {
@@ -43,7 +27,7 @@ class Parser {
 
       // Expression
       E: {
-        1: ["identificador", "número"],
+        1: ["identificador", "número", "real"],
       },
       E_X: {
         1: ["+", "-"],
@@ -51,7 +35,7 @@ class Parser {
       },
       E_T: {
         // Term
-        1: ["identificador", "número"],
+        1: ["identificador", "número", "real"],
       },
       E_Y: {
         1: ["*", "/"],
@@ -59,7 +43,28 @@ class Parser {
       },
       E_F: {
         // Factor
-        1: ["identificador", "número"],
+        1: ["identificador", "número", "real"],
+      },
+
+      // Condition
+      C: {
+        1: ["identificador", "número", "real"],
+      },
+      C_X: {
+        1: ["&&", "||"],
+        2: [")"],
+      },
+      C_T: {
+        // Term
+        1: ["identificador", "número", "real"],
+      },
+      C_Y: {
+        1: ["<", ">", "<=", ">=", "==", "!="],
+        2: ["&&", "||", ")"],
+      },
+      C_F: {
+        // Factor
+        1: ["identificador", "número", "real"],
       },
     };
     this.stack = []; // Used for validating control structures
@@ -70,8 +75,8 @@ class Parser {
     this.scanner.index = 0;
     this.token = this.scanner.scan();
 
+    debugger
     while (this.token.type !== "Fin") {
-      debugger;
       if (this.token.type === "data type") {
         if (!this.D()) return false;
         this.token = this.scanner.scan();
@@ -84,9 +89,20 @@ class Parser {
         if (!this.controlStructure()) return false;
       } //
       else {
-        this.message = "Error: Expected data type or control structure keyword";
+        this.message = "Error: Tipo de dato/identificador/palabra clave esperado";
         return false;
       }
+    }
+    if (this.stack.length > 0) {
+      switch (this.stack[this.stack.length - 1]) {
+        case "si":
+          this.message = "Error: fin_si esperado";
+          break;
+        case "mientras":
+          this.message = "Error: fin_mientras esperado";
+          break;
+      }
+      return false;
     }
     return true;
   }
@@ -103,14 +119,14 @@ class Parser {
       if (!this.D_R()) return false;
       return true;
     }
-    this.message = "Error: Expected data type";
+    this.message = "Error: Tipo de dato esperado";
     return false;
   }
   D_R() {
     if (this.simbolosDir["D_R"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
       if (this.token.type !== "identificador") {
-        this.message = "Error: Expected identifier after comma";
+        this.message = "Error: Identificador esperado después de la coma";
         return false;
       }
       this.token = this.scanner.scan();
@@ -122,104 +138,88 @@ class Parser {
       return true;
     }
     this.message =
-      "Error: Expected comma or semicolon after variable declaration";
+      "Error: Coma o punto y coma esperado después de un identificador";
     return false;
   }
   D_Q() {
     if (this.simbolosDir["D_Q"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
 
-      if (!this.E()) return false;
+      if (!this.D_M()) return false;
       return true;
     } else if (this.simbolosDir["D_Q"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Expected equals sign or comma or semicolon";
+    this.message = "Error: Punto y coma/signo igual/coma esperado";
     return false;
   }
-  // controlStructure() {
-  //   if (this.token.value === "si") {
-  //     this.stack.push("si");
-  //     this.token = this.scanner.scan();
-  //     if (this.token.value !== "(") {
-  //       this.message = "Error: Expected opening parenthesis after if";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     let result = this.
-  //     if (!result) return false;
-  //     if (this.token.value !== ")") {
-  //       this.message = "Error: Expected closing parenthesis after condition";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     // result = this.block();
-  //     // if (!result) return false;
-  //     return true;
-  //   } else if (this.token.value === "while") {
-  //     this.token = this.scanner.scan();
-  //     if (this.token.value !== "(") {
-  //       this.message = "Error: Expected opening parenthesis after while";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     let result = this.condition();
-  //     if (!result) return false;
-  //     if (this.token.value !== ")") {
-  //       this.message = "Error: Expected closing parenthesis after condition";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     result = this.block();
-  //     if (!result) return false;
-  //     return true;
-  //   } else if (this.token.value === "for") {
-  //     this.token = this.scanner.scan();
-  //     if (this.token.value !== "(") {
-  //       this.message = "Error: Expected opening parenthesis after for";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     let result = this.assignment();
-  //     if (!result) return false;
-  //     if (this.token.value !== ";") {
-  //       this.message = "Error: Expected semicolon after assignment";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     result = this.condition();
-  //     if (!result) return false;
-  //     if (this.token.value !== ";") {
-  //       this.message = "Error: Expected semicolon after condition";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     result = this.assignment();
-  //     if (!result) return false;
-  //     if (this.token.value !== ")") {
-  //       this.message = "Error: Expected closing parenthesis after assignment";
-  //       return false;
-  //     }
-  //     this.token = this.scanner.scan();
-  //     result = this.block();
-  //     if (!result) return false;
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  D_M() {
+    if (this.simbolosDir["D_M"][1].includes(this.token.type)) {
+      if (!this.E()) return false;
+      return true;
+    } else if (this.simbolosDir["D_M"][2].includes(this.token.value)) {
+      return true;
+    }
+    this.message = "Error: Identificador/número/punto y coma/coma esperado";
+  }
+  controlStructure() {
+    let temp;
+
+    if (this.token.value === "si" || this.token.value === "mientras") {
+      this.stack.push(this.token.value);
+      this.token = this.scanner.scan();
+      if (this.token.value !== "(") {
+        this.message =
+        "Error: Se esperaba un paréntesis de apertura después de la palabra clave de la estructura de control";
+        return false;
+      }
+      this.token = this.scanner.scan();
+      if (!this.C()) return false;
+      if (this.token.value !== ")") {
+        this.message = "Error: Se esperaba un paréntesis de cierre después de la condición";
+        return false;
+      }
+      this.token = this.scanner.scan();
+      if (
+        this.token.value === "$" ||
+        this.token.value === "fin_si" ||
+        this.token.value === "fin_mientras"
+      ) {
+        this.message = "Error: Se esperaba una instrucción después de la condición";
+        return false;
+      }
+      return true;
+    } else if (
+      this.token.value === "fin_si" ||
+      this.token.value === "fin_mientras"
+    ) {
+      temp = this.token.value;
+      if (
+        this.stack[this.stack.length - 1] ===
+        `${this.token.value.split("_")[1]}`
+      ) {
+        this.stack.pop();
+        this.token = this.scanner.scan();
+        return true;
+      }
+      this.message = `Error: ${temp} inesperado`;
+      return false;
+    }
+    return false;
+  }
 
   A() {
     if (this.simbolosDir["A"][1].includes(this.token.type)) {
       this.token = this.scanner.scan();
       if (this.token.value !== "=") {
-        this.message = "Error: Expected equals sign after identifier";
+        this.message = "Error: Signo igual esperado después de un identificador";
         return false;
       }
       this.token = this.scanner.scan();
       if (!this.E()) return false;
       return true;
     }
-    this.message = "Error: Expected identifier";
+    this.message = "Error: Identificador esperado";
     return false;
   }
 
@@ -229,7 +229,7 @@ class Parser {
       if (!this.E_X()) return false;
       return true;
     }
-    this.message = "Error: Expected identifier or number";
+    this.message = "Error: Identificador o número esperado";
     return false;
   }
   E_X() {
@@ -241,7 +241,7 @@ class Parser {
     } else if (this.simbolosDir["E_X"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Expected operator  or semicolon";
+    this.message = "Error: Operador o punto y coma esperado";
     return false;
   }
   E_T() {
@@ -250,11 +250,9 @@ class Parser {
       if (!this.E_Y()) return false;
       return true;
     }
-    this.message = "Error: Expected identifier or number";
+    this.message = "Error: Identificador o número esperado";
     return false;
   }
-
-
   E_Y() {
     if (this.simbolosDir["E_Y"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
@@ -264,7 +262,7 @@ class Parser {
     } else if (this.simbolosDir["E_Y"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Expected operator or semicolon";
+    this.message = "Error: Operador o punto y coma esperado"
     return false;
   }
   E_F() {
@@ -272,7 +270,57 @@ class Parser {
       this.token = this.scanner.scan();
       return true;
     }
-    this.message = "Error: Expected identifier or number";
+    this.message = "Error: Identificador o número esperado";
+    return false;
+  }
+  C() {
+    if (this.simbolosDir["C"][1].includes(this.token.type)) {
+      if (!this.C_T()) return false;
+      if (!this.C_X()) return false;
+      return true;
+    }
+    this.message = "Error: Identificador o número esperado";
+    return false;
+  }
+  C_X() {
+    if (this.simbolosDir["C_X"][1].includes(this.token.value)) {
+      this.token = this.scanner.scan();
+      if (!this.C_T()) return false;
+      if (!this.C_X()) return false;
+      return true;
+    } else if (this.simbolosDir["C_X"][2].includes(this.token.value)) {
+      return true;
+    }
+    this.message = "Error: Expected operator or closing parenthesis";
+    return false;
+  }
+  C_T() {
+    if (this.simbolosDir["C_T"][1].includes(this.token.type)) {
+      if (!this.C_F()) return false;
+      if (!this.C_Y()) return false;
+      return true;
+    }
+    this.message = "Error: Identificador o número esperado"
+    return false;
+  }
+  C_Y() {
+    if (this.simbolosDir["C_Y"][1].includes(this.token.value)) {
+      this.token = this.scanner.scan();
+      if (!this.C_F()) return false;
+      if (!this.C_Y()) return false;
+      return true;
+    } else if (this.simbolosDir["C_Y"][2].includes(this.token.value)) {
+      return true;
+    }
+    this.message = "Error: Operador o paréntesis de cierre esperado"
+    return false;
+  }
+  C_F() {
+    if (this.simbolosDir["C_F"][1].includes(this.token.type)) {
+      this.token = this.scanner.scan();
+      return true;
+    }
+    this.message = "Error: Identificador o número esperado";
     return false;
   }
 }
