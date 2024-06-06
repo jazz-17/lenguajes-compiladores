@@ -110,7 +110,7 @@ class Parser {
     if (this.simbolosDir["D"][1].includes(this.token.type)) {
       this.token = this.scanner.scan();
       if (this.token.type !== "identificador") {
-        this.message = "Error: Expected identifier after data type";
+        this.message = "Error: Identificador esperado despues de un tipo de dato"
         return false;
       }
       this.token = this.scanner.scan();
