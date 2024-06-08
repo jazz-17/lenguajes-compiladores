@@ -15,33 +15,47 @@ class Parser {
         1: ["="],
         2: [",", ";"],
       },
-      D_M: {
+      // Expression
+      D_E: {
         1: ["identificador", "número", "real"],
+      },
+      D_X: {
+        1: ["+", "-"],
         2: [",", ";"],
+      },
+      D_T: {
+        // Term
+        1: ["identificador", "número", "real"],
+      },
+      D_Y: {
+        1: ["*", "/"],
+        2: ["+", "-", ",", ";"],
+      },
+      D_F: {
+        // Factor
+        1: ["identificador", "número", "real"],
       },
 
       // variable assignment
       A: {
         1: ["identificador"],
       },
-
-      // Expression
-      E: {
+      A_E: {
         1: ["identificador", "número", "real"],
       },
-      E_X: {
+      A_X: {
         1: ["+", "-"],
         2: [";"],
       },
-      E_T: {
+      A_T: {
         // Term
         1: ["identificador", "número", "real"],
       },
-      E_Y: {
+      A_Y: {
         1: ["*", "/"],
         2: ["+", "-", ";"],
       },
-      E_F: {
+      A_F: {
         // Factor
         1: ["identificador", "número", "real"],
       },
@@ -145,7 +159,7 @@ class Parser {
     if (this.simbolosDir["D_Q"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
 
-      if (!this.D_M()) return false;
+      if (!this.D_E()) return false;
       return true;
     } else if (this.simbolosDir["D_Q"][2].includes(this.token.value)) {
       return true;
@@ -153,15 +167,57 @@ class Parser {
     this.message = "Error: Punto y coma/signo igual/coma esperado";
     return false;
   }
-  D_M() {
-    if (this.simbolosDir["D_M"][1].includes(this.token.type)) {
-      if (!this.E()) return false;
-      return true;
-    } else if (this.simbolosDir["D_M"][2].includes(this.token.value)) {
+  D_E() {
+    if (this.simbolosDir["D_E"][1].includes(this.token.type)) {
+      if (!this.D_T()) return false;
+      if (!this.D_X()) return false;
       return true;
     }
-    this.message = "Error: Identificador/número/punto y coma/coma esperado";
+    this.message = "Error: Identificador/número esperado";
+    return false;
   }
+  D_X() {
+    if (this.simbolosDir["D_X"][1].includes(this.token.value)) {
+      this.token = this.scanner.scan();
+      if (!this.D_T()) return false;
+      if (!this.D_X()) return false;
+      return true;
+    } else if (this.simbolosDir["D_X"][2].includes(this.token.value)) {
+      return true;
+    }
+    this.message = "Error: Operador/punto y coma esperado";
+    return false;
+  }
+  D_T() {
+    if (this.simbolosDir["D_T"][1].includes(this.token.type)) {
+      if (!this.D_F()) return false;
+      if (!this.D_Y()) return false;
+      return true;
+    }
+    this.message = "Error: Identificador/número esperado";
+    return false;
+  }
+  D_Y() {
+    if (this.simbolosDir["D_Y"][1].includes(this.token.value)) {
+      this.token = this.scanner.scan();
+      if (!this.D_F()) return false;
+      if (!this.D_Y()) return false;
+      return true;
+    } else if (this.simbolosDir["D_Y"][2].includes(this.token.value)) {
+      return true;
+    }
+    this.message = "Error: Operador/punto y coma esperado";
+    return false;
+  }
+  D_F() {
+    if (this.simbolosDir["D_F"][1].includes(this.token.type)) {
+      this.token = this.scanner.scan();
+      return true;
+    }
+    this.message = "Error: Identificador/número esperado";
+    return false;
+  }
+
   controlStructure() {
     let temp;
 
@@ -216,61 +272,61 @@ class Parser {
         return false;
       }
       this.token = this.scanner.scan();
-      if (!this.E()) return false;
+      if (!this.A_E()) return false;
       return true;
     }
     this.message = "Error: Identificador esperado";
     return false;
   }
 
-  E() {
-    if (this.simbolosDir["E"][1].includes(this.token.type)) {
-      if (!this.E_T()) return false;
-      if (!this.E_X()) return false;
+  A_E() {
+    if (this.simbolosDir["A_E"][1].includes(this.token.type)) {
+      if (!this.A_T()) return false;
+      if (!this.A_X()) return false;
       return true;
     }
-    this.message = "Error: Identificador o número esperado";
+    this.message = "Error: Identificador/número esperado";
     return false;
   }
-  E_X() {
-    if (this.simbolosDir["E_X"][1].includes(this.token.value)) {
+  A_X() {
+    if (this.simbolosDir["A_X"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
-      if (!this.E_T()) return false;
-      if (!this.E_X()) return false;
+      if (!this.A_T()) return false;
+      if (!this.A_X()) return false;
       return true;
-    } else if (this.simbolosDir["E_X"][2].includes(this.token.value)) {
-      return true;
-    }
-    this.message = "Error: Operador o punto y coma esperado";
-    return false;
-  }
-  E_T() {
-    if (this.simbolosDir["E_T"][1].includes(this.token.type)) {
-      if (!this.E_F()) return false;
-      if (!this.E_Y()) return false;
+    } else if (this.simbolosDir["A_X"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Identificador o número esperado";
+    this.message = "Error: Operador/punto y coma esperado";
     return false;
   }
-  E_Y() {
-    if (this.simbolosDir["E_Y"][1].includes(this.token.value)) {
+  A_T() {
+    if (this.simbolosDir["A_T"][1].includes(this.token.type)) {
+      if (!this.A_F()) return false;
+      if (!this.A_Y()) return false;
+      return true;
+    }
+    this.message = "Error: Identificador/número esperado";
+    return false;
+  }
+  A_Y() {
+    if (this.simbolosDir["A_Y"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
-      if (!this.E_F()) return false;
-      if (!this.E_Y()) return false;
+      if (!this.A_F()) return false;
+      if (!this.A_Y()) return false;
       return true;
-    } else if (this.simbolosDir["E_Y"][2].includes(this.token.value)) {
+    } else if (this.simbolosDir["A_Y"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Operador o punto y coma esperado"
+    this.message = "Error: Operador/punto y coma esperado"
     return false;
   }
-  E_F() {
-    if (this.simbolosDir["E_F"][1].includes(this.token.type)) {
+  A_F() {
+    if (this.simbolosDir["A_F"][1].includes(this.token.type)) {
       this.token = this.scanner.scan();
       return true;
     }
-    this.message = "Error: Identificador o número esperado";
+    this.message = "Error: Identificador/número esperado";
     return false;
   }
   C() {
@@ -279,7 +335,7 @@ class Parser {
       if (!this.C_X()) return false;
       return true;
     }
-    this.message = "Error: Identificador o número esperado";
+    this.message = "Error: Identificador/número esperado";
     return false;
   }
   C_X() {
@@ -291,7 +347,7 @@ class Parser {
     } else if (this.simbolosDir["C_X"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Expected operator or closing parenthesis";
+    this.message = "Error: Operador/paréntesis de cierre esperado";
     return false;
   }
   C_T() {
@@ -300,7 +356,7 @@ class Parser {
       if (!this.C_Y()) return false;
       return true;
     }
-    this.message = "Error: Identificador o número esperado"
+    this.message = "Error: Identificador/número esperado"
     return false;
   }
   C_Y() {
@@ -320,7 +376,7 @@ class Parser {
       this.token = this.scanner.scan();
       return true;
     }
-    this.message = "Error: Identificador o número esperado";
+    this.message = "Error: Identificador/número esperado";
     return false;
   }
 }
