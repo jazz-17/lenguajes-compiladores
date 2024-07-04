@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>  
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -150,16 +150,14 @@
         >
           Escanear
         </button>
-        <span class="flex text-white font-normal">  mientras(a < b)
-          c = a + b;
-          si(b && 2)
-            real d = 2.5 + 4.12 * 1;
-          fin_si
-          entero e = 2;
-        fin_mientras</span>
+        <span class="flex text-white font-normal">
+          mientras(a < b) c = a + b; si(b && 2) real d = 2.5 + 4.12 * 1; fin_si
+          entero e = 2; fin_mientras</span
+        >
         <div class="centered-content">
           <textarea
             class="code-editor"
+            id="scanner-input"
             placeholder="Ej: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;   real a=3.5*2+1*10;&#10;&#09;fin_si"
             style="width: 70%"
             oninput="scanner.content = this.value; scanner.index = 0"
@@ -185,16 +183,14 @@
         >
           Parse
         </button>
-        <span class="flex text-white font-normal">  mientras(a < b)
-          c = a + b;
-          si(b && 2)
-            real d = 2.5 + 4.12 * 1;
-          fin_si
-          entero e = 2;
-        fin_mientras</span>
+        <span class="flex text-white font-normal">
+          mientras(a < b) c = a + b; si(b && 2) real d = 2.5 + 4.12 * 1; fin_si
+          entero e = 2; fin_mientras</span
+        >
         <div class="centered-content">
           <textarea
             class="code-editor"
+            id="parser-input"
             placeholder="Ej: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;   real a=3.5*2+1*10;&#10;&#09;fin_si"
             style="width: 70%"
             oninput="scanner.content = this.value; scanner.index = 0; parser.message = ''"
@@ -259,6 +255,43 @@
   </style>
   <script src="scanner.js"></script>
   <script src="parser.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var parserTextArea = document.getElementById("parser-input");
+      parserTextArea.addEventListener("keydown", function (event) {
+        if (event.key === "Tab") {
+          event.preventDefault();
+
+          var start = this.selectionStart;
+          var end = this.selectionEnd;
+
+          // Set the value of the textarea to itself plus a tab character at the cursor position
+          this.value =
+            this.value.substring(0, start) + "\t" + this.value.substring(end);
+
+          // Move the cursor to the right place
+          this.selectionStart = this.selectionEnd = start + 1;
+        }
+      });
+      var scannerTextArea = document.getElementById("scanner-input");
+      scannerTextArea.addEventListener("keydown", function (event) {
+        if (event.key === "Tab") {
+          event.preventDefault();
+
+          var start = this.selectionStart;
+          var end = this.selectionEnd;
+
+          // Set the value of the textarea to itself plus a tab character at the cursor position
+          this.value =
+            this.value.substring(0, start) + "\t" + this.value.substring(end);
+
+          // Move the cursor to the right place
+          this.selectionStart = this.selectionEnd = start + 1;
+        }
+      });
+    });
+
+  </script>
   <script>
     let scanner = new Scanner("");
     let parser = new Parser(scanner);

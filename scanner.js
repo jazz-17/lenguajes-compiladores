@@ -13,8 +13,6 @@ class Scanner {
     this.separators = [";", ",", "(", ")"];
     this._index = 0; // current index in the content
     this.currentChar = "";
-
-    this.errors = [];
   }
 
   set index(i) {
@@ -25,7 +23,6 @@ class Scanner {
     return this._index;
   }
   scan() {
-    this.errors = [];
     if (this.index >= this.content.length) {
       return { value: "$", type: "Fin" }; // end of file
     }
@@ -42,7 +39,7 @@ class Scanner {
     let token = "";
 
     // String literal --NOT SUPPORTED--
-    if (this.currentChar === '"') { 
+    if (this.currentChar === '"') {
       token += this.currentChar;
       this.index++;
       while (this.currentChar !== '"' && this.index < this.content.length) {
@@ -50,10 +47,6 @@ class Scanner {
         this.index++;
       }
       if (this.currentChar !== '"') {
-        this.errors.push({
-          message: "Error: Comillas de cierre esperada",
-          index: this.index,
-        });
         return { value: token, type: "error" };
       }
 
@@ -83,10 +76,6 @@ class Scanner {
           token += this.currentChar;
           this.index++;
         }
-        this.errors.push({
-          message: "Error: Numero inválido",
-          index: this.index,
-        });
         return { value: token, type: "error" };
       }
       return { value: token, type: "número" };
@@ -156,15 +145,11 @@ class Scanner {
       token += this.currentChar;
       this.index++;
       return { value: token, type: "separador" };
-    } 
+    }
     // Error
     else {
       token += this.currentChar;
       this.index++;
-      this.errors.push({
-        message: `Error: caracter no reconocido ${token}`,
-        index: this.index,
-      });
       return { value: token, type: "error" };
     }
   }

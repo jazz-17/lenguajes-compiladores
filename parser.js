@@ -89,7 +89,7 @@ class Parser {
     this.scanner.index = 0;
     this.token = this.scanner.scan();
 
-    debugger
+    debugger;
     while (this.token.type !== "Fin") {
       if (this.token.type === "data type") {
         if (!this.D()) return false;
@@ -103,7 +103,8 @@ class Parser {
         if (!this.controlStructure()) return false;
       } //
       else {
-        this.message = "Error: Tipo de dato/identificador/palabra clave esperado";
+        this.message =
+          "Error: Tipo de dato/identificador/palabra clave esperado";
         return false;
       }
     }
@@ -120,11 +121,60 @@ class Parser {
     }
     return true;
   }
+
+  controlStructure() {
+    let temp;
+
+    if (this.token.value === "si" || this.token.value === "mientras") {
+      this.stack.push(this.token.value);
+      this.token = this.scanner.scan();
+      if (this.token.value !== "(") {
+        this.message =
+          "Error: Se esperaba un paréntesis de apertura después de la palabra clave de la estructura de control";
+        return false;
+      }
+      this.token = this.scanner.scan();
+      if (!this.C()) return false;
+      if (this.token.value !== ")") {
+        this.message =
+          "Error: Se esperaba un paréntesis de cierre después de la condición";
+        return false;
+      }
+      this.token = this.scanner.scan();
+      if (
+        this.token.value === "$" ||
+        this.token.value === "fin_si" ||
+        this.token.value === "fin_mientras"
+      ) {
+        this.message =
+          "Error: Se esperaba una instrucción después de la condición";
+        return false;
+      }
+      return true;
+    } else if (
+      this.token.value === "fin_si" ||
+      this.token.value === "fin_mientras"
+    ) {
+      temp = this.token.value;
+      if (
+        this.stack[this.stack.length - 1] ===
+        `${this.token.value.split("_")[1]}`
+      ) {
+        this.stack.pop();
+        this.token = this.scanner.scan();
+        return true;
+      }
+      this.message = `Error: ${temp} inesperado`;
+      return false;
+    }
+    return false;
+  }
   D() {
     if (this.simbolosDir["D"][1].includes(this.token.type)) {
       this.token = this.scanner.scan();
       if (this.token.type !== "identificador") {
-        this.message = "Error: Identificador esperado despues de un tipo de dato"
+        this.message =
+          "Error: Identificador esperado despues de un tipo de dato";
         return false;
       }
       this.token = this.scanner.scan();
@@ -149,7 +199,7 @@ class Parser {
       if (!this.D_R()) return false;
       return true;
     } else if (this.simbolosDir["D_R"][2].includes(this.token.value)) {
-      return true;
+      return true; // lambda
     }
     this.message =
       "Error: Coma o punto y coma esperado después de un identificador";
@@ -158,7 +208,6 @@ class Parser {
   D_Q() {
     if (this.simbolosDir["D_Q"][1].includes(this.token.value)) {
       this.token = this.scanner.scan();
-
       if (!this.D_E()) return false;
       return true;
     } else if (this.simbolosDir["D_Q"][2].includes(this.token.value)) {
@@ -204,7 +253,7 @@ class Parser {
       if (!this.D_Y()) return false;
       return true;
     } else if (this.simbolosDir["D_Y"][2].includes(this.token.value)) {
-      return true;
+      return true; // lambda
     }
     this.message = "Error: Operador/punto y coma esperado";
     return false;
@@ -218,57 +267,12 @@ class Parser {
     return false;
   }
 
-  controlStructure() {
-    let temp;
-
-    if (this.token.value === "si" || this.token.value === "mientras") {
-      this.stack.push(this.token.value);
-      this.token = this.scanner.scan();
-      if (this.token.value !== "(") {
-        this.message =
-        "Error: Se esperaba un paréntesis de apertura después de la palabra clave de la estructura de control";
-        return false;
-      }
-      this.token = this.scanner.scan();
-      if (!this.C()) return false;
-      if (this.token.value !== ")") {
-        this.message = "Error: Se esperaba un paréntesis de cierre después de la condición";
-        return false;
-      }
-      this.token = this.scanner.scan();
-      if (
-        this.token.value === "$" ||
-        this.token.value === "fin_si" ||
-        this.token.value === "fin_mientras"
-      ) {
-        this.message = "Error: Se esperaba una instrucción después de la condición";
-        return false;
-      }
-      return true;
-    } else if (
-      this.token.value === "fin_si" ||
-      this.token.value === "fin_mientras"
-    ) {
-      temp = this.token.value;
-      if (
-        this.stack[this.stack.length - 1] ===
-        `${this.token.value.split("_")[1]}`
-      ) {
-        this.stack.pop();
-        this.token = this.scanner.scan();
-        return true;
-      }
-      this.message = `Error: ${temp} inesperado`;
-      return false;
-    }
-    return false;
-  }
-
   A() {
     if (this.simbolosDir["A"][1].includes(this.token.type)) {
       this.token = this.scanner.scan();
       if (this.token.value !== "=") {
-        this.message = "Error: Signo igual esperado después de un identificador";
+        this.message =
+          "Error: Signo igual esperado después de un identificador";
         return false;
       }
       this.token = this.scanner.scan();
@@ -318,7 +322,7 @@ class Parser {
     } else if (this.simbolosDir["A_Y"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Operador/punto y coma esperado"
+    this.message = "Error: Operador/punto y coma esperado";
     return false;
   }
   A_F() {
@@ -356,7 +360,7 @@ class Parser {
       if (!this.C_Y()) return false;
       return true;
     }
-    this.message = "Error: Identificador/número esperado"
+    this.message = "Error: Identificador/número esperado";
     return false;
   }
   C_Y() {
@@ -368,7 +372,7 @@ class Parser {
     } else if (this.simbolosDir["C_Y"][2].includes(this.token.value)) {
       return true;
     }
-    this.message = "Error: Operador o paréntesis de cierre esperado"
+    this.message = "Error: Operador o paréntesis de cierre esperado";
     return false;
   }
   C_F() {
