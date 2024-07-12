@@ -20,16 +20,10 @@
       </div>
 
       <nav class="navbar">
-        <button onclick="toggleContent('info', 'scanner', 'parser')">
-          Nosotros
-        </button>
-        <button onclick="toggleContent('scanner', 'info', 'parser')">
-          Scanner
-        </button>
-        <button onclick="toggleContent('parser', 'info', 'scanner')">
-          Parser
-        </button>
-        <button>EXPRESIONES ARITMETICAS</button>
+        <button onclick="toggleContent('info', 'scanner', 'parser', 'expresiones')">Nosotros</button>
+        <button onclick="toggleContent('scanner', 'info', 'parser', 'expresiones')">Scanner</button>
+        <button onclick="toggleContent('parser', 'info', 'scanner', 'expresiones')">Parser</button>
+        <button onclick="toggleContent('expresiones', 'info', 'scanner', 'parser')">Expresiones Aritméticas</button>
       </nav>
     </div>
 
@@ -205,6 +199,16 @@
         </div>
       </div>
     </div>
+            <div id="expresiones" class="main" style="display: none">
+      <div class="idk">
+        <button class="button" style="background-color: #4a90e2" onclick="interpretCode()">Interpretar</button>
+        <span class="flex text-white font-normal">Expresiones aritméticas simples</span>
+        <div class="centered-content">
+          <textarea class="code-editor" id="codeInput" placeholder="Ej: 3 + 5 * (2 - 4) / 2" style="width: 70%"></textarea>
+          <textarea class="code-editor" id="output" placeholder="Resultado..." style="width: 30%; font-style: italic; font-size: 14px" disabled></textarea>
+        </div>
+      </div>
+    </div>
   </body>
   <style>
     .main {
@@ -255,6 +259,7 @@
   </style>
   <script src="scanner.js"></script>
   <script src="parser.js"></script>
+  <script src="expresionesaritmeticas.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       var parserTextArea = document.getElementById("parser-input");
