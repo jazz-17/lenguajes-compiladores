@@ -20,16 +20,12 @@
       </div>
 
       <nav class="navbar">
-        <button onclick="toggleContent('info', 'scanner', 'parser')">
-          Nosotros
+        <button onclick="toggleContent('info')">Nosotros</button>
+        <button onclick="toggleContent('scanner')">Scanner</button>
+        <button onclick="toggleContent('parser')">Parser</button>
+        <button onclick="toggleContent('arithmetic')">
+          EXPRESIONES ARITMETICAS
         </button>
-        <button onclick="toggleContent('scanner', 'info', 'parser')">
-          Scanner
-        </button>
-        <button onclick="toggleContent('parser', 'info', 'scanner')">
-          Parser
-        </button>
-        <button>EXPRESIONES ARITMETICAS</button>
       </nav>
     </div>
 
@@ -150,10 +146,10 @@
         >
           Escanear
         </button>
-        <span class="flex text-white font-normal">
+        <!-- <span class="flex text-white font-normal">
           mientras(a < b) c = a + b; si(b && 2) real d = 2.5 + 4.12 * 1; fin_si
           entero e = 2; fin_mientras</span
-        >
+        > -->
         <div class="centered-content">
           <textarea
             class="code-editor"
@@ -183,10 +179,10 @@
         >
           Parse
         </button>
-        <span class="flex text-white font-normal">
+        <!-- <span class="flex text-white font-normal">
           mientras(a < b) c = a + b; si(b && 2) real d = 2.5 + 4.12 * 1; fin_si
           entero e = 2; fin_mientras</span
-        >
+        > -->
         <div class="centered-content">
           <textarea
             class="code-editor"
@@ -198,7 +194,35 @@
           ></textarea>
           <textarea
             class="code-editor"
+            placeholder="Mensaje..."
+            style="width: 30%; font-style: italic; font-size: 14px"
+            disabled
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPRESIONES ARITMETICAS -->
+    <div id="arithmetic" class="main" style="display: none">
+      <div class="idk">
+        <button
+          class="button"
+          style="background-color: #168ae9"
+          onclick="interpretCode()"
+        >
+          Evaluar
+        </button>
+        <div class="centered-content">
+          <textarea
+            class="code-editor"
+            id="expresionAritmetica-input"
+            style="width: 70%"
+            placeholder="Ingrese una expresión..."
+          ></textarea>
+          <textarea
+            class="code-editor"
             placeholder="Resultado..."
+            id="expresionAritmetica-output"
             style="width: 30%; font-style: italic; font-size: 14px"
             disabled
           ></textarea>
@@ -253,6 +277,7 @@
       gap: 4rem;
     }
   </style>
+  <script src="ExpresionesAritmeticas.js"></script>
   <script src="scanner.js"></script>
   <script src="parser.js"></script>
   <script>
@@ -290,7 +315,6 @@
         }
       });
     });
-
   </script>
   <script>
     let scanner = new Scanner("");
@@ -300,7 +324,7 @@
       let token = scanner.scan();
       document.querySelectorAll(
         ".code-editor"
-      )[1].value = ${token.value}\n\n(${token.type});
+      )[1].value = `${token.value}\n\n(${token.type})`;
     }
     function parseString() {
       let result = parser.parse();
@@ -311,21 +335,22 @@
       document.querySelectorAll(".code-editor")[3].value =
         "La cadena es correcta";
     }
-    function toggleContent(showElementId, hideElementId, hideElementId2) {
-      var showElement = document.getElementById(showElementId);
-      var hideElement = document.getElementById(hideElementId);
-      var hideElement2 = document.getElementById(hideElementId2);
-
-      if (showElementId === "scanner" || showElementId === "parser") {
-        showElement.style.backgroundColor = "#161616";
-        showElement.style.display = "flex";
-        hideElement.style.display = "none";
-        hideElement2.style.display = "none";
-      } else {
-        showElement.style.display = "block";
-        hideElement.style.display = "none";
-        hideElement2.style.display = "none";
-      }
+    function toggleContent(showElementId) {
+      const tabs = ["info", "scanner", "parser", "arithmetic"];
+      tabs.forEach((tab) => {
+        const element = document.getElementById(tab);
+        if (tab === showElementId) {
+          if (tab === "scanner" || tab === "parser" || tab === "arithmetic") {
+            element.style.backgroundColor = "#161616";
+            element.style.display = "flex";
+          } else {
+            element.style.display = "block";
+          }
+        } else {
+          element.style.display = "none";
+        }
+      });
     }
+  
   </script>
 </html>

@@ -2,94 +2,39 @@ class Parser {
   constructor(scanner) {
     this.scanner = scanner;
     this.message = "";
-    this.simbolosDir = {
-      // Variable Declaration
-      D: {
-        1: ["data type"],
-      },
-      D_R: {
-        1: [","],
-        2: [";"],
-      },
-      D_Q: {
-        1: ["="],
-        2: [",", ";"],
-      },
-      // Expression
-      D_E: {
-        1: ["identificador", "número", "real"],
-      },
-      D_X: {
-        1: ["+", "-"],
-        2: [",", ";"],
-      },
-      D_T: {
-        // Term
-        1: ["identificador", "número", "real"],
-      },
-      D_Y: {
-        1: ["*", "/"],
-        2: ["+", "-", ",", ";"],
-      },
-      D_F: {
-        // Factor
-        1: ["identificador", "número", "real"],
-      },
-
-      // variable assignment
-      A: {
-        1: ["identificador"],
-      },
-      A_E: {
-        1: ["identificador", "número", "real"],
-      },
-      A_X: {
-        1: ["+", "-"],
-        2: [";"],
-      },
-      A_T: {
-        // Term
-        1: ["identificador", "número", "real"],
-      },
-      A_Y: {
-        1: ["*", "/"],
-        2: ["+", "-", ";"],
-      },
-      A_F: {
-        // Factor
-        1: ["identificador", "número", "real"],
-      },
-
-      // Condition
-      C: {
-        1: ["identificador", "número", "real"],
-      },
-      C_X: {
-        1: ["&&", "||"],
-        2: [")"],
-      },
-      C_T: {
-        // Term
-        1: ["identificador", "número", "real"],
-      },
-      C_Y: {
-        1: ["<", ">", "<=", ">=", "==", "!="],
-        2: ["&&", "||", ")"],
-      },
-      C_F: {
-        // Factor
-        1: ["identificador", "número", "real"],
-      },
-    };
-    this.stack = []; // Used for validating control structures
+    this.stack = [];
     this.token;
+    this.simbolosDir = {
+      //Declaración de variable
+      D: { 1: ["data type"] },
+      D_R: { 1: [","], 2: [";"] },
+      D_Q: { 1: ["="], 2: [",", ";"] },
+      D_E: { 1: ["identificador", "número", "real"] }, // expresión
+      D_X: { 1: ["+", "-"], 2: [",", ";"] },
+      D_T: { 1: ["identificador", "número", "real"] }, // termino
+      D_Y: { 1: ["*", "/"], 2: ["+", "-", ",", ";"] },
+      D_F: { 1: ["identificador", "número", "real"] }, // factor
+
+      // Asignación de variable
+      A: { 1: ["identificador"] },
+      A_E: { 1: ["identificador", "número", "real"] },
+      A_X: { 1: ["+", "-"], 2: [";"] },
+      A_T: { 1: ["identificador", "número", "real"] },
+      A_Y: { 1: ["*", "/"], 2: ["+", "-", ";"] },
+      A_F: { 1: ["identificador", "número", "real"] },
+
+      // Condición
+      C: { 1: ["identificador", "número", "real"] },
+      C_X: { 1: ["&&", "||"], 2: [")"] },
+      C_T: { 1: ["identificador", "número", "real"] },
+      C_Y: { 1: ["<", ">", "<=", ">=", "==", "!="], 2: ["&&", "||", ")"] },
+      C_F: { 1: ["identificador", "número", "real"] },
+    };
   }
-  parse() {
+  parse() { // Método principal, retorna un booleano
     this.stack = [];
     this.scanner.index = 0;
     this.token = this.scanner.scan();
-
-    debugger;
     while (this.token.type !== "Fin") {
       if (this.token.type === "data type") {
         if (!this.D()) return false;
@@ -108,9 +53,21 @@ class Parser {
         return false;
       }
     }
+    if (!verificarStack()) return false;
+    return true;
+  }
+
+
+
+  
+  verificarStack() {
     if (this.stack.length > 0) {
-      switch (this.stack[this.stack.length - 1]) {
+      const top = this.stack[this.stack.length - 1];
+      switch (top) {
         case "si":
+          this.message = "Error: fin_si esperado";
+          break;
+        case "sino":
           this.message = "Error: fin_si esperado";
           break;
         case "mientras":
@@ -119,55 +76,70 @@ class Parser {
       }
       return false;
     }
-    return true;
   }
-
   controlStructure() {
-    let temp;
-
-    if (this.token.value === "si" || this.token.value === "mientras") {
-      this.stack.push(this.token.value);
-      this.token = this.scanner.scan();
-      if (this.token.value !== "(") {
-        this.message =
-          "Error: Se esperaba un paréntesis de apertura después de la palabra clave de la estructura de control";
-        return false;
-      }
-      this.token = this.scanner.scan();
-      if (!this.C()) return false;
-      if (this.token.value !== ")") {
-        this.message =
-          "Error: Se esperaba un paréntesis de cierre después de la condición";
-        return false;
-      }
-      this.token = this.scanner.scan();
-      if (
-        this.token.value === "$" ||
-        this.token.value === "fin_si" ||
-        this.token.value === "fin_mientras"
-      ) {
-        this.message =
-          "Error: Se esperaba una instrucción después de la condición";
-        return false;
-      }
+    const top = this.stack[this.stack.length - 1] ?? "";
+    const input = this.token.value;
+    if (input === "si" || input === "mientras") {
+      this.stack.push(input);
+      if (!this.recognizeCondition()) return false;
       return true;
-    } else if (
-      this.token.value === "fin_si" ||
-      this.token.value === "fin_mientras"
-    ) {
-      temp = this.token.value;
-      if (
-        this.stack[this.stack.length - 1] ===
-        `${this.token.value.split("_")[1]}`
-      ) {
+    } else if (input === "sino") {
+      if (top === "si") {
+        this.token = this.scanner.scan();
+        return true;
+      }
+      this.message = "Error: si esperado";
+    } else if (input === "fin_mientras") {
+      if (top === "mientras") {
         this.stack.pop();
         this.token = this.scanner.scan();
         return true;
       }
-      this.message = `Error: ${temp} inesperado`;
-      return false;
+      this.message = `Error: fin_mientras inesperado`;
+    } else if (input === "fin_si") {
+      if (top === "si") {
+        this.stack.pop();
+        this.token = this.scanner.scan();
+        return true;
+      } else if (top === "sino") {
+        this.stack.pop();
+        this.stack.pop();
+        this.token = this.scanner.scan();
+        return true;
+      }
+      this.message = `Error: fin_si inesperado`;
     }
     return false;
+  }
+
+  recognizeCondition() {
+    this.token = this.scanner.scan();
+    if (this.token.value !== "(") {
+      this.message =
+        "Error: Se esperaba un paréntesis de apertura después de la palabra clave de la estructura de control";
+      return false;
+    }
+    this.token = this.scanner.scan();
+    if (!this.C()) return false;
+    if (this.token.value !== ")") {
+      this.message =
+        "Error: Se esperaba un paréntesis de cierre después de la condición";
+      return false;
+    }
+
+    this.token = this.scanner.scan();
+    if (this.token.value === "$") {
+      console.log(this.stack);
+      let top = this.stack[this.stack.length - 1];
+      if (top === "si") {
+        this.message = "Error: fin_si esperado";
+      } else {
+        this.message = "Error: fin_mientras esperado";
+      }
+      return false;
+    }
+    return true;
   }
   D() {
     if (this.simbolosDir["D"][1].includes(this.token.type)) {
@@ -282,7 +254,6 @@ class Parser {
     this.message = "Error: Identificador esperado";
     return false;
   }
-
   A_E() {
     if (this.simbolosDir["A_E"][1].includes(this.token.type)) {
       if (!this.A_T()) return false;

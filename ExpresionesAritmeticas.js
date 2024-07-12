@@ -264,11 +264,12 @@ class ArithmeticInterpreter {
 
 function interpretCode() {
     const interpreter = new ArithmeticInterpreter();
-    const codeInput = document.getElementById("codeInput");
+    const codeInput = document.getElementById("expresionAritmetica-input");
     const code = codeInput.value.trim();
-    const outputElement = document.getElementById("output");
+    const outputElement = document.getElementById("expresionAritmetica-output");
 
     outputElement.textContent = "";
+    outputElement.placeholder = ""
 
     const lines = code.split("\n");
     let coutOutputs = "";
