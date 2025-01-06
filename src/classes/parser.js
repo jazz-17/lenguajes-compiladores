@@ -1,4 +1,4 @@
-class Parser {
+export default class Parser {
   constructor(scanner) {
     this.scanner = scanner;
     this.message = "";
@@ -53,21 +53,9 @@ class Parser {
         return false;
       }
     }
-    if (!verificarStack()) return false;
-    return true;
-  }
-
-
-
-  
-  verificarStack() {
     if (this.stack.length > 0) {
-      const top = this.stack[this.stack.length - 1];
-      switch (top) {
+      switch (this.stack[this.stack.length - 1]) {
         case "si":
-          this.message = "Error: fin_si esperado";
-          break;
-        case "sino":
           this.message = "Error: fin_si esperado";
           break;
         case "mientras":
@@ -76,7 +64,10 @@ class Parser {
       }
       return false;
     }
+    return true;
   }
+
+
   controlStructure() {
     const top = this.stack[this.stack.length - 1] ?? "";
     const input = this.token.value;

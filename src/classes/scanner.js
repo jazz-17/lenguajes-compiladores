@@ -1,4 +1,4 @@
-class Scanner {
+export default class Scanner {
   constructor(content) {
     this.content = content;
     this.dataTypes = ["entero", "real"];

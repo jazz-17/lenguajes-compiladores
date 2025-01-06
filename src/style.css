@@ -5,12 +5,34 @@
     font-size: 100%;
     vertical-align: baseline;
 }
+.button {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 220px;
+    margin-top: 1rem;
+}
 
+.code-editor {
+    height: 100%;
+    background-color: #383838e5;
+    color: rgb(207, 207, 207);
+    font-family: monospace;
+    font-size: 17px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
 body{
     height: 100dvh;
     text-align: center;
     font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 .head {
     display: flex;
@@ -24,6 +46,17 @@ body{
     z-index: 100;
 }
 
+.code-editor {
+    height: 100%;
+    background-color: #383838e5;
+    color: rgb(207, 207, 207);
+    font-family: monospace;
+    font-size: 17px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 .navbar {
     display: flex;
     margin-right: 10px;
@@ -33,12 +66,7 @@ body{
     margin-left: 30px;
 }
 
-.logo button {
-    text-decoration: none;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 20px;
-}
+
 
 .navbar button {
     background-color: #171717;
@@ -53,7 +81,8 @@ body{
 }
 
 .navbar button:hover {
-    background: #FFFF00;
+    background: lightgrey;
+    color: #171717;
 }
 
 .header {
@@ -61,7 +90,7 @@ body{
     justify-content: center;
     align-items: center;
     height: 60vh;
-    background: url(img/img/programador1.jpg) no-repeat center;
+    background: url(../img/img/programador1.jpg) no-repeat center;
     background-size: cover;
 }
 
@@ -80,19 +109,6 @@ p {
     padding: 0 100px;
 }
 
-.btn {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 40px;
-    border: 2px solid #FFFF00;
-    color: #171717;
-    text-decoration: none;
-    background: #FFFF00;
-}
-
-.btn:hover {
-    background: none;
-}
 
 .content {
     height: 50vh;
@@ -147,7 +163,7 @@ p {
 }
 
 .price {
-    background: url(img/img/programador2.jpg) no-repeat center;
+    background: url(../img/img/programador2.jpg) no-repeat center;
     background-size: cover;
     background-attachment: fixed;
     text-align: center;
@@ -169,7 +185,6 @@ p {
     width: 250px;
     padding-bottom: 20px;
     text-align: center;
-    box-shadow: 0 5px 5px #rgba(0, 0, 0, 3);
     background: #171717;
 }
 

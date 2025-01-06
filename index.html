@@ -1,356 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-    />
-    <link rel="stylesheet" href="style.css" />
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
 
     <title>Analizador</title>
-  </head>
-
-  <body>
-    <div class="head">
-      <div class="logo">
+  <script type="module" crossorigin src="/assets/index-BlI3bsmR.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BMcXOZhG.css">
+</head>
+<body>
+<div class="head">
+    <div class="logo">
         <a href="#">LOGO</a>
-      </div>
+    </div>
 
-      <nav class="navbar">
+    <nav class="navbar">
         <button onclick="toggleContent('info')">Nosotros</button>
         <button onclick="toggleContent('scanner')">Scanner</button>
         <button onclick="toggleContent('parser')">Parser</button>
         <button onclick="toggleContent('arithmetic')">
-          EXPRESIONES ARITMETICAS
+            Evaluar Expresiones
         </button>
-      </nav>
-    </div>
+    </nav>
+</div>
 
-    <div id="info">
-      <header class="content header">
+<div id="info">
+    <header class="content header">
         <h2 class="title">Inicio</h2>
         <p>SOMOS EL GRUPO 11 DE LENGUAJES Y COMPILADORES</p>
         <a href="#" class="btn"> Saber más</a>
-      </header>
+    </header>
 
-      <section class="content sau">
+    <section class="content sau">
         <h2 class="title">TRABAJO</h2>
         <p>REALIZAMOS EL CÓDIGO DEL SCANNER Y DEL PARSER.</p>
 
         <div class="box-Container">
-          <div class="box">
-            <a href="#" class="btn"> SCANNER</a>
-            <p>
-              un "scanner" (también conocido como "analizador léxico") es una
-              parte crucial del proceso de compilación. Su función principal es
-              analizar el flujo de caracteres que componen el código fuente de
-              un programa y convertirlos en una secuencia de "tokens" o
-              "símbolos", que son unidades léxicas significativas para el
-              compilador.
-            </p>
-          </div>
+            <div class="box">
+                <a href="#" class="btn"> SCANNER</a>
+                <p>
+                    un "scanner" (también conocido como "analizador léxico") es una
+                    parte crucial del proceso de compilación. Su función principal es
+                    analizar el flujo de caracteres que componen el código fuente de
+                    un programa y convertirlos en una secuencia de "tokens" o
+                    "símbolos", que son unidades léxicas significativas para el
+                    compilador.
+                </p>
+            </div>
 
-          <div class="box">
-            <a href="#" class="btn"> PARSER</a>
-            <p>
-              El parser, o analizador sintáctico, es otra parte fundamental de
-              un compilador. Después de que el scanner ha convertido el flujo de
-              caracteres del código fuente en una secuencia de tokens, el parser
-              toma estos tokens y los organiza en una estructura jerárquica que
-              representa la gramática del lenguaje de programación.
-            </p>
-          </div>
+            <div class="box">
+                <a href="#" class="btn"> PARSER</a>
+                <p>
+                    El parser, o analizador sintáctico, es otra parte fundamental de
+                    un compilador. Después de que el scanner ha convertido el flujo de
+                    caracteres del código fuente en una secuencia de tokens, el parser
+                    toma estos tokens y los organiza en una estructura jerárquica que
+                    representa la gramática del lenguaje de programación.
+                </p>
+            </div>
         </div>
-      </section>
+    </section>
 
-      <section class="content price">
+    <section class="content price">
         <article class="contain"></article>
-      </section>
+    </section>
 
-      <section class="contenido about">
+    <section class="contenido about">
         <h2 class="title">nosotros</h2>
         <p>
-          Somos un grupo de estudiantes de ingeniería de sistemas comprometidos
-          con la innovación tecnológica. Nuestro objetivo es poder mostrarle
-          nuestros conocimientos y aplicarlos en proyectos prácticos que tengan
-          un impacto real en la sociedad.
+            Somos un grupo de estudiantes de ingeniería de sistemas comprometidos
+            con la innovación tecnológica. Nuestro objetivo es poder mostrarle
+            nuestros conocimientos y aplicarlos en proyectos prácticos que tengan
+            un impacto real en la sociedad.
         </p>
         <div class="box-container2">
-          <div class="box">
-            <img src="img/img/pic1.jpg" alt="" />
-            <h3>Kevin Quispe</h3>
-            <p>Ing.Sistemas</p>
-            <div class="stars">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+            <div class="box">
+                <img src="data:image/jpeg;base64,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" alt=""/>
+                <h3>Kevin Quispe</h3>
+                <p>Ing.Sistemas</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
             </div>
-          </div>
 
-          <div class="box">
-            <img src="img/img/pic2.jpg" alt="" />
-            <h3>Hans Ventura</h3>
-            <p>Ing.Sistemas</p>
-            <div class="stars">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+            <div class="box">
+                <img src="data:image/jpeg;base64,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" alt=""/>
+                <h3>Hans Ventura</h3>
+                <p>Ing.Sistemas</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
             </div>
-          </div>
 
-          <div class="box">
-            <img src="img/img/pic3.jpg" alt="" />
-            <h3>Piero Huayta</h3>
-            <p>Ing.Sistemas</p>
-            <div class="stars">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+            <div class="box">
+                <img src="data:image/jpeg;base64,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" alt=""/>
+                <h3>Piero Huayta</h3>
+                <p>Ing.Sistemas</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
             </div>
-          </div>
         </div>
-      </section>
+    </section>
 
-      <section class="content contact">
+    <section class="content contact">
         <h2 class="title">GRACIAS</h2>
         <div class="footer-section">
-          <div>
-            <p>por su visita</p>
-          </div>
+            <div>
+                <p>por su visita</p>
+            </div>
 
-          <figure>
-            <img
-              src="img/img/UNMSM-LOGO.png"
-              height="200px"
-              width="100%"
-              alt="mapa"
-            />
-          </figure>
+            <figure>
+                <img
+                        src="/assets/UNMSM-LOGO-dxAX7pSR.png"
+                        height="200px"
+                        width="100%"
+                        alt="mapa"
+                />
+            </figure>
         </div>
-      </section>
-    </div>
-
-    <!-- SCANNER -->
-    <div id="scanner" class="main" style="display: none">
-      <div class="idk">
+    </section>
+</div>
+<!-- SCANNER -->
+<div id="scanner" class="h-full justify-evenly items-end gap-4 p-2" style="display: none">
+    <div class="idk flex flex-col w-full h-full mx-4 gap-2">
         <button
-          class="button"
-          style="background-color: #3e9141"
-          onclick="getToken()"
+                class="button"
+                id="scanner-button"
+                style="background-color: #3e9141"
         >
-          Escanear
+            Escanear
         </button>
-        <!-- <span class="flex text-white font-normal">
-          mientras(a < b) c = a + b; si(b && 2) real d = 2.5 + 4.12 * 1; fin_si
-          entero e = 2; fin_mientras</span
-        > -->
-        <div class="centered-content">
+        <div class="flex relative justify-center items-center gap-4 grow">
+            <button class="text-xs absolute top-3 left-50 bg-gray-100 rounded-md p-2" id="copyButton">Copiar ejemplo
+            </button>
           <textarea
-            class="code-editor"
-            id="scanner-input"
-            placeholder="Ej: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;   real a=3.5*2+1*10;&#10;&#09;fin_si"
-            style="width: 70%"
-            oninput="scanner.content = this.value; scanner.index = 0"
-            onchange="scanner.content = this.value; scanner.index = 0"
+                  class="code-editor"
+                  id="scanner-input"
+                  placeholder="Ej: &#10;&#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;   real a=3.5*2+1*10;&#10;&#09;fin_si"
+                  style="width: 70%"
           ></textarea>
-          <textarea
-            class="code-editor"
-            placeholder="Token..."
-            style="width: 30%; font-style: italic; font-size: 14px"
-            disabled
-          ></textarea>
-        </div>
-      </div>
-    </div>
+            <textarea
+                    class="code-editor"
+                    placeholder="Token..."
 
-    <!-- PARSER -->
-    <div id="parser" class="main" style="display: none">
-      <div class="idk">
+                    style="width: 30%; font-style: italic; font-size: 14px"
+                    disabled
+            ></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- PARSER -->
+<div id="parser" class="h-full justify-evenly items-end gap-4 p-2" style="display: none">
+    <div class=" flex flex-col w-full h-full mx-4 gap-2">
         <button
-          class="button"
-          style="background-color: #b64f20"
-          onclick="parseString()"
+                class="button"
+                id="parser-button"
+                style="background-color: #b64f20"
         >
-          Parse
+            Parse
         </button>
-        <!-- <span class="flex text-white font-normal">
-          mientras(a < b) c = a + b; si(b && 2) real d = 2.5 + 4.12 * 1; fin_si
-          entero e = 2; fin_mientras</span
-        > -->
-        <div class="centered-content">
+        <div class="flex relative justify-center items-center gap-4 grow">
+            <button class="text-xs absolute top-3 left-50 bg-gray-100 rounded-md p-2" id="copyButton2">Copiar ejemplo
+            </button>
           <textarea
-            class="code-editor"
-            id="parser-input"
-            placeholder="Ej: &#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;   real a=3.5*2+1*10;&#10;&#09;fin_si"
-            style="width: 70%"
-            oninput="scanner.content = this.value; scanner.index = 0; parser.message = ''"
-            onchange="scanner.content = this.value; scanner.index = 0; parser.message = ''"
+                  class="code-editor"
+                  id="parser-input"
+                  placeholder="Ej: &#10;&#09;entero a, b;&#10;&#09;entero b, c = 3;&#10;&#09;real x,suma, y=48;&#10;&#09;&#10;&#09;si(x<8)&#10;&#09;   real a=3.5*2+1*10;&#10;&#09;fin_si"
+                  style="width: 70%"
           ></textarea>
-          <textarea
-            class="code-editor"
-            placeholder="Mensaje..."
-            style="width: 30%; font-style: italic; font-size: 14px"
-            disabled
-          ></textarea>
+            <textarea
+                    class="code-editor"
+                    placeholder="Mensaje..."
+                    style="width: 30%; font-style: italic; font-size: 14px"
+                    disabled
+            ></textarea>
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- EXPRESIONES ARITMETICAS -->
-    <div id="arithmetic" class="main" style="display: none">
-      <div class="idk">
+<!-- EXPRESIONES ARITMETICAS -->
+<div id="arithmetic" class="h-full justify-evenly items-end gap-4 p-2" style="display: none">
+    <div class=" flex flex-col w-full h-full mx-4 gap-2">
         <button
-          class="button"
-          style="background-color: #168ae9"
-          onclick="interpretCode()"
+                class="button"
+                id="interpret-button"
+                style="background-color: #168ae9"
         >
-          Evaluar
+            Evaluar Expresión
         </button>
-        <div class="centered-content">
-          <textarea
-            class="code-editor"
-            id="expresionAritmetica-input"
-            style="width: 70%"
-            placeholder="Ingrese una expresión..."
-          ></textarea>
-          <textarea
-            class="code-editor"
-            placeholder="Resultado..."
-            id="expresionAritmetica-output"
-            style="width: 30%; font-style: italic; font-size: 14px"
-            disabled
-          ></textarea>
+        <div class="relative">
+
         </div>
-      </div>
+        <div class="flex justify-center items-center gap-4 grow relative">
+            <button class="text-xs absolute top-3 left-50 bg-gray-100 rounded-md p-2" id="copyButton3">Copiar ejemplo
+            </button>
+            <textarea
+                    class="code-editor"
+                    id="expresionAritmetica-input"
+                    style="width: 70%"
+                    placeholder="Ej: &#10;&#09;a = 22 + 5&#10;&#09;b = 60&#10;&#09;cout << a * 2;&#10;&#09;cout << a + 10&#10;&#09;cout << a + b"
+
+            ></textarea>
+
+            <textarea
+                    class="code-editor"
+                    placeholder="Resultado..."
+                    id="expresionAritmetica-output"
+                    style="width: 30%; font-style: italic; font-size: 14px"
+                    disabled
+            ></textarea>
+        </div>
     </div>
-  </body>
-  <style>
-    .main {
-      height: 100%;
-      justify-content: space-evenly;
-      align-items: end;
-      gap: 2rem;
-      padding-bottom: 2rem;
-    }
-    .button {
-      padding: 10px 20px;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 220px;
-      margin-top: 1rem;
-    }
-    .code-editor {
-      height: 100%;
+</div>
 
-      background-color: #383838e5;
-      color: rgb(207, 207, 207);
-      font-family: monospace; /* Use a monospaced font for code */
-      font-size: 17px; /* Adjust the font size as needed */
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-
-      box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    }
-    .idk {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      width: 100%;
-      margin-left: 4rem;
-      margin-right: 4rem;
-      gap: 2rem;
-    }
-    .centered-content {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      flex-grow: 1;
-      gap: 4rem;
-    }
-  </style>
-  <script src="ExpresionesAritmeticas.js"></script>
-  <script src="scanner.js"></script>
-  <script src="parser.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var parserTextArea = document.getElementById("parser-input");
-      parserTextArea.addEventListener("keydown", function (event) {
-        if (event.key === "Tab") {
-          event.preventDefault();
-
-          var start = this.selectionStart;
-          var end = this.selectionEnd;
-
-          // Set the value of the textarea to itself plus a tab character at the cursor position
-          this.value =
-            this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-          // Move the cursor to the right place
-          this.selectionStart = this.selectionEnd = start + 1;
-        }
-      });
-      var scannerTextArea = document.getElementById("scanner-input");
-      scannerTextArea.addEventListener("keydown", function (event) {
-        if (event.key === "Tab") {
-          event.preventDefault();
-
-          var start = this.selectionStart;
-          var end = this.selectionEnd;
-
-          // Set the value of the textarea to itself plus a tab character at the cursor position
-          this.value =
-            this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-          // Move the cursor to the right place
-          this.selectionStart = this.selectionEnd = start + 1;
-        }
-      });
-    });
-  </script>
-  <script>
-    let scanner = new Scanner("");
-    let parser = new Parser(scanner);
-
-    function getToken() {
-      let token = scanner.scan();
-      document.querySelectorAll(
-        ".code-editor"
-      )[1].value = `${token.value}\n\n(${token.type})`;
-    }
-    function parseString() {
-      let result = parser.parse();
-      if (!result) {
-        document.querySelectorAll(".code-editor")[3].value = parser.message;
-        return;
-      }
-      document.querySelectorAll(".code-editor")[3].value =
-        "La cadena es correcta";
-    }
+<div class="opacity-0 absolute" id="textToCopy">
+    entero a,b;
+    real c;
+    si(a &lt; b)
+    c = a + b;
+    fin_si
+</div>
+<div class="opacity-0 absolute" id="textToCopy2">
+    a = 22 + 5
+    b = 60
+    cout &lt;&lt; a * 2
+    cout &lt;&lt; a + 10
+    cout &lt;&lt; a + b
+</div>
+<script>
     function toggleContent(showElementId) {
-      const tabs = ["info", "scanner", "parser", "arithmetic"];
-      tabs.forEach((tab) => {
-        const element = document.getElementById(tab);
-        if (tab === showElementId) {
-          if (tab === "scanner" || tab === "parser" || tab === "arithmetic") {
-            element.style.backgroundColor = "#161616";
-            element.style.display = "flex";
-          } else {
-            element.style.display = "block";
-          }
-        } else {
-          element.style.display = "none";
-        }
-      });
+        const tabs = ["info", "scanner", "parser", "arithmetic"];
+        tabs.forEach((tab) => {
+            const element = document.getElementById(tab);
+            if (tab === showElementId) {
+                if (tab === "scanner" || tab === "parser" || tab === "arithmetic") {
+                    element.style.backgroundColor = "#161616";
+                    element.style.display = "flex";
+                } else {
+                    element.style.display = "block";
+                }
+            } else {
+                element.style.display = "none";
+            }
+        });
     }
-  
-  </script>
+
+    const copyButton = document.getElementById('copyButton');
+    const copyButton2 = document.getElementById('copyButton2');
+    const copyButton3 = document.getElementById('copyButton3');
+    const textToCopyElement = document.getElementById('textToCopy');
+    const textToCopyElement2 = document.getElementById('textToCopy2');
+
+    async function copyTextToClipboard(element) {
+        if (!navigator.clipboard) {
+            return;
+        }
+        try {
+            const text = element.textContent
+            await navigator.clipboard.writeText(text);
+            copyButton.innerText = "Copiado!"
+            copyButton2.innerText = "Copiado!"
+            copyButton3.innerText = "Copiado!"
+            setTimeout(() => {
+                copyButton.innerText = "Copiar ejemplo"
+                copyButton2.innerText = "Copiar ejemplo"
+                copyButton3.innerText = "Copiar ejemplo"
+            }, 1500)
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            alert('Error copying text. Please try again.');
+        }
+    }
+
+    copyButton.addEventListener('click', () => {
+        copyTextToClipboard(textToCopyElement);
+    });
+    copyButton2.addEventListener('click', () => {
+        copyTextToClipboard(textToCopyElement);
+    });
+    copyButton3.addEventListener('click', () => {
+        copyTextToClipboard(textToCopyElement2);
+    });
+
+</script>
+</body>
 </html>
